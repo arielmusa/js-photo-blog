@@ -5,20 +5,15 @@ const apiUrlPhoto = "https://lanciweb.github.io/demo/api/pictures/";
 const postCardRow = document.getElementById("post-card-row");
 
 let photoLibrary = [];
-console.log(axios.get(apiUrlPhoto));
 
-axios
-  .get(apiUrlPhoto)
-  .then((response) => {
-    photoLibrary = response.data;
-    photoLibrary.forEach((photo) => {
-      console.log(photo);
-      const { url } = photo;
-      generatePostCard(url);
-    });
-  })
-  .catch((error) => console.error(error));
-
+function getPhotos() {
+  return axios
+    .get(apiUrlPhoto)
+    .then((response) => {
+      photoLibrary = response.data;
+    })
+    .catch((error) => console.error(error));
+}
 function generatePostCard(img) {
   postCardRow.innerHTML += `
   <div class="col-lg-3">
@@ -31,3 +26,13 @@ function generatePostCard(img) {
     </div>
 `;
 }
+
+async function generatePostCardRowHTML() {
+  await getPhotos();
+  photoLibrary.forEach((photo) => {
+    const { url } = photo;
+    generatePostCard(url);
+  });
+}
+
+generatePostCardRowHTML();
