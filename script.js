@@ -14,14 +14,16 @@ function getPhotos() {
     })
     .catch((error) => console.error(error));
 }
-function generatePostCard(img) {
+
+function generatePostCard(id, title, date, url) {
   postCardRow.innerHTML += `
   <div class="col-lg-3">
     <div class="post-card">
-        <img src="${img}" />
-        <p class="img-description">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-        </p>
+        <img src="${url}" data-photo-id="${id}" />
+        <div> ${date}
+        </div>
+        <div> ${title}
+        </div>
     </div>
     </div>
 `;
@@ -30,9 +32,28 @@ function generatePostCard(img) {
 async function generatePostCardRowHTML() {
   await getPhotos();
   photoLibrary.forEach((photo) => {
-    const { url } = photo;
-    generatePostCard(url);
+    const { id, title, date, url } = photo;
+    generatePostCard(id, title, date, url);
   });
 }
 
-generatePostCardRowHTML();
+async function imageOpener() {
+  await generatePostCardRowHTML();
+  const postCardRowImgs = postCardRow.querySelectorAll("img");
+  const hoverlay = document.querySelector(".hoverlay");
+  const hoverlayImg = hoverlay.querySelector("img");
+  const closeImgButton = hoverlay.querySelector("button");
+
+  postCardRowImgs.forEach((img) => {
+    img.addEventListener("click", () => {
+      hoverlay.classList.remove("d-none");
+      hoverlayImg.src = img.src;
+    });
+  });
+
+  closeImgButton.addEventListener("click", () => {
+    hoverlay.classList.add("d-none");
+  });
+}
+
+imageOpener();

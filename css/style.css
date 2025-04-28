@@ -76,8 +76,7 @@ main {
 }
 
 .hoverlay img {
-  width: 300px;
-  height: 300px;
+  width: 500px;
   background-color: brown;
   max-width: 100%;
   object-fit: cover;
@@ -91,6 +90,7 @@ main {
   background-color: brown;
   max-width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 
 [class*="col"] .post-card {
