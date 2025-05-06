@@ -12,15 +12,23 @@ function getPhotos() {
     .then((response) => {
       photoLibrary = response.data;
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      postCardRow.innerHTML = `
+        <div class="alert alert-danger" role="alert">
+  Errore nel caricamento delle foto
+        </div>
+`;
+      console.error(error);
+    });
 }
 
 function generatePostCard(id, title, date, url) {
   postCardRow.innerHTML += `
   <div class="col-lg-3">
     <div class="post-card">
+    <img id="pin" src="./img/pin.svg" />
         <img src="${url}" data-photo-id="${id}" />
-        <div> ${date}
+        <div class="date"> ${date}
         </div>
         <div> ${title}
         </div>
@@ -30,7 +38,7 @@ function generatePostCard(id, title, date, url) {
 }
 
 async function generatePostCardRowHTML() {
-  await getPhotos();
+  /*   await getPhotos(); */
   photoLibrary.forEach((photo) => {
     const { id, title, date, url } = photo;
     generatePostCard(id, title, date, url);
@@ -38,7 +46,7 @@ async function generatePostCardRowHTML() {
 }
 
 async function imageOpener() {
-  await generatePostCardRowHTML();
+  /* await generatePostCardRowHTML(); */
   const postCardRowImgs = postCardRow.querySelectorAll("img");
   const hoverlay = document.querySelector(".hoverlay");
   const hoverlayImg = hoverlay.querySelector("img");
@@ -56,4 +64,10 @@ async function imageOpener() {
   });
 }
 
-imageOpener();
+async function init() {
+  await getPhotos();
+  await generatePostCardRowHTML();
+  imageOpener();
+}
+
+init();
